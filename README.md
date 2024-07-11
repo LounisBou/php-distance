@@ -92,4 +92,4 @@ return 0; // Placeholder
 Contributions are welcome! Please feel free to submit a Pull Request or open an Issue on GitHub.
 
 ## License
-This library is licensed under the MIT License. See the LICENSE file for more details.
+This library is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
