@@ -1,0 +1,19 @@
+{
+    "name": "lounisbou/phpdistance",
+    "description": "A PHP library for calculating the distance between two geographical points on Earth using various Earth radius values.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "PHPDistance\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "LounisBou",
+            "email": "lounis.bou@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
