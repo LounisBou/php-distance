@@ -21,13 +21,13 @@ $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 try {
     $connection = DriverManager::getConnection([
-        'host' => $_ENV['DATABASE_HOST'],
-        'port' => $_ENV['DATABASE_PORT'],
-        'dbname' => $_ENV['DATABASE_NAME'],
-        'user' => $_ENV['DATABASE_USER'],
-        'password' => $_ENV['DATABASE_PASSWORD'],
-        'version' => $_ENV['DATABASE_VERSION'],
-        'driver' => $_ENV['DATABASE_DRIVER'],
+        'host' => $_ENV['DATABASE_HOST'] ?? 'localhost',
+        'port' => $_ENV['DATABASE_PORT'] ?? 3306,
+        'dbname' => $_ENV['DATABASE_NAME'] ?? 'mysql',
+        'user' => $_ENV['DATABASE_USER'] ?? 'root',
+        'password' => $_ENV['DATABASE_PASSWORD'] ?? '',
+        'version' => $_ENV['DATABASE_VERSION'] ?? '8.0',
+        'driver' => $_ENV['DATABASE_DRIVER'] ?? 'pdo_mysql',
     ]);
 } catch (\Exception $e) {
     echo "Failed to establish connection: " . $e->getMessage() . PHP_EOL;
@@ -49,7 +49,7 @@ $routes = [
 
 
 // Number of iterations
-$iterations = 1000;
+$iterations = $_ENV['NB_ITERATIONS'] ?? 1000;
 
 // For each iteration
 foreach(range(1, $iterations) as $iteration) {
@@ -87,13 +87,11 @@ foreach(range(1, $iterations) as $iteration) {
     }
 }
 
-// Calculate average time
-foreach($averageTime as $key => $value) {
-    $averageTime[$key] = $value / $iterations;
-}
-
 // Display results
-echo "Average time taken for $iterations iterations :" . PHP_EOL . PHP_EOL;
+echo "Results for $iterations iterations :" . PHP_EOL . PHP_EOL;
 foreach($averageTime as $key => $value) {
-    echo "$key: ". $distances[$key]. " in " . number_format($value, 9) * 1000 * 1000 . " microseconds" . PHP_EOL . PHP_EOL;
+    echo "$key: ". PHP_EOL;
+    echo "  - Distance: " . $distances[$key] . PHP_EOL;
+    echo "  - Average time: " . number_format($value / $iterations, 9) * 1000 * 1000 . " microseconds" . PHP_EOL;
+    echo "  - Total time: " . number_format($value, 3) . " seconds" . PHP_EOL . PHP_EOL;
 }
