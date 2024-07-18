@@ -29,7 +29,6 @@ try {
         'version' => $_ENV['DATABASE_VERSION'],
         'driver' => $_ENV['DATABASE_DRIVER'],
     ]);
-    echo "Connection established successfully." . PHP_EOL;
 } catch (\Exception $e) {
     echo "Failed to establish connection: " . $e->getMessage() . PHP_EOL;
     exit(1);
