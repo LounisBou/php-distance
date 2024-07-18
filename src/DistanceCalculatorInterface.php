@@ -6,8 +6,6 @@ namespace PHPDistance;
 
 interface DistanceCalculatorInterface
 {
-    public function __construct(float $earthRadius);
-
     /**
      * Calculate the distance between two points
      * @param Route $route Line between two points to calculate the distance for
