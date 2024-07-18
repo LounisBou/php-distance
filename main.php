@@ -66,9 +66,9 @@ foreach ($routes as $routeName => $route) {
         $vincentyCalculator = new VincentyCalculator($radiusValue);
         echo "Using Vincenty formula = ";
         echo Route::getHumanReadableDistance($vincentyCalculator->calculate($route)) . PHP_EOL;
-        echo PHP_EOL;
         $microtimeAfter = microtime(true);
         echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
+        echo PHP_EOL;
     }
     $microtimeBefore = microtime(true);
     $mysqlCalculator = new SqlCalculator($connection);
@@ -80,5 +80,4 @@ foreach ($routes as $routeName => $route) {
     }
     $microtimeAfter = microtime(true);
     echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
-    echo "--------------------------" . PHP_EOL;
 }
