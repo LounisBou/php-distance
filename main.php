@@ -52,16 +52,25 @@ $routes = [
 foreach ($routes as $routeName => $route) {
     echo "--------------------------" . PHP_EOL;
     foreach(EarthRadius::values() as $radiusType => $radiusValue) {
+
+        $microtimeBefore = microtime(true);
         $haversineCalculator = new HaversineCalculator($radiusValue);
         echo "Distance between $routeName using $radiusType radius:" . PHP_EOL;
         echo "Using Haversine formula = ";
         echo Route::getHumanReadableDistance($haversineCalculator->calculate($route)) . PHP_EOL;
+        $microtimeAfter = microtime(true);
+        // Convert seconds to microseconds
+        echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
 
+        $microtimeBefore = microtime(true);
         $vincentyCalculator = new VincentyCalculator($radiusValue);
         echo "Using Vincenty formula = ";
         echo Route::getHumanReadableDistance($vincentyCalculator->calculate($route)) . PHP_EOL;
         echo PHP_EOL;
+        $microtimeAfter = microtime(true);
+        echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
     }
+    $microtimeBefore = microtime(true);
     $mysqlCalculator = new SqlCalculator($connection);
     echo "Distance between $routeName using MySQL ST_DISTANCE_SPHERE function : ";
     try {
@@ -69,5 +78,7 @@ foreach ($routes as $routeName => $route) {
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage() . PHP_EOL;
     }
+    $microtimeAfter = microtime(true);
+    echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
     echo "--------------------------" . PHP_EOL;
 }
