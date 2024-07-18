@@ -60,6 +60,9 @@ The Haversine formula is an equation giving great-circle distances between two p
 ### Vincenty Formula
 Vincenty's formulae are two related iterative methods used in geodesy to calculate the distance between two points on the surface of an ellipsoid. They are accurate for long distances.
 
+### MySQL Formula
+The MySQL formula is a simplified version of the Haversine formula that can be used in MySQL queries to calculate distances between two points.
+
 ### Custom Earth Radius
 You can specify a custom Earth radius if needed:
 
