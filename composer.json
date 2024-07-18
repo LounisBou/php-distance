@@ -2,6 +2,14 @@
     "name": "lounisbou/phpdistance",
     "description": "A PHP library for calculating the distance between two geographical points on Earth using various Earth radius values.",
     "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "distance",
+        "geographical",
+        "earth",
+        "radius",
+        "php"
+    ],
     "autoload": {
         "psr-4": {
             "PHPDistance\\": "src/"
