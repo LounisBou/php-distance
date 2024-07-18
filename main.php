@@ -47,36 +47,53 @@ $routes = [
 ];
 
 
-// Calculate distance for each rides
-foreach ($routes as $routeName => $route) {
-    echo "--------------------------" . PHP_EOL;
-    foreach(EarthRadius::values() as $radiusType => $radiusValue) {
 
-        $microtimeBefore = microtime(true);
-        $haversineCalculator = new HaversineCalculator($radiusValue);
-        echo "Distance between $routeName using $radiusType radius:" . PHP_EOL;
-        echo "Using Haversine formula = ";
-        echo Route::getHumanReadableDistance($haversineCalculator->calculate($route)) . PHP_EOL;
-        $microtimeAfter = microtime(true);
-        // Convert seconds to microseconds
-        echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
+// Number of iterations
+$iterations = 1000;
 
+// For each iteration
+foreach(range(1, $iterations) as $iteration) {
+    // Calculate distance for each rides
+    foreach ($routes as $routeName => $route) {
+        foreach(EarthRadius::values() as $radiusType => $radiusValue) {
+            // Haversine
+            $microtimeBefore = microtime(true);
+            $haversineCalculator = new HaversineCalculator($radiusValue);
+            $distances["Haversine $radiusType radius for $routeName"] = Route::getHumanReadableDistance($haversineCalculator->calculate($route));
+            $microtimeAfter = microtime(true);
+            if(!isset($averageTime["Haversine $radiusType radius for $routeName"])) {
+                $averageTime["Haversine $radiusType radius for $routeName"] = 0;
+            }
+            $averageTime["Haversine $radiusType radius for $routeName"] += ($microtimeAfter - $microtimeBefore);
+            // Vincenty
+            $microtimeBefore = microtime(true);
+            $vincentyCalculator = new VincentyCalculator($radiusValue);
+            $distances["Vincenty $radiusType radius for $routeName"] = Route::getHumanReadableDistance($vincentyCalculator->calculate($route));
+            $microtimeAfter = microtime(true);
+            if(!isset($averageTime["Vincenty $radiusType radius for $routeName"])) {
+                $averageTime["Vincenty $radiusType radius for $routeName"] = 0;
+            }
+            $averageTime["Vincenty $radiusType radius for $routeName"] +=  ($microtimeAfter - $microtimeBefore);
+        }
+        // MySQL
         $microtimeBefore = microtime(true);
-        $vincentyCalculator = new VincentyCalculator($radiusValue);
-        echo "Using Vincenty formula = ";
-        echo Route::getHumanReadableDistance($vincentyCalculator->calculate($route)) . PHP_EOL;
+        $mysqlCalculator = new SqlCalculator($connection);
+        $distances["MySQL for $routeName"] = Route::getHumanReadableDistance($mysqlCalculator->calculate($route));
         $microtimeAfter = microtime(true);
-        echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
-        echo PHP_EOL;
+        if(!isset($averageTime["MySQL for $routeName"])) {
+            $averageTime["MySQL for $routeName"] = 0;
+        }
+        $averageTime["MySQL for $routeName"] +=  ($microtimeAfter - $microtimeBefore);
     }
-    $microtimeBefore = microtime(true);
-    $mysqlCalculator = new SqlCalculator($connection);
-    echo "Distance between $routeName using MySQL ST_DISTANCE_SPHERE function : ";
-    try {
-        echo Route::getHumanReadableDistance($mysqlCalculator->calculate($route)) . PHP_EOL;
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage() . PHP_EOL;
-    }
-    $microtimeAfter = microtime(true);
-    echo "Time taken: " . ($microtimeAfter - $microtimeBefore) * 1000 * 1000 . " microseconds" . PHP_EOL;
+}
+
+// Calculate average time
+foreach($averageTime as $key => $value) {
+    $averageTime[$key] = $value / $iterations;
+}
+
+// Display results
+echo "Average time taken for $iterations iterations :" . PHP_EOL . PHP_EOL;
+foreach($averageTime as $key => $value) {
+    echo "$key: ". $distances[$key]. " in " . number_format($value, 9) * 1000 * 1000 . " microseconds" . PHP_EOL . PHP_EOL;
 }
