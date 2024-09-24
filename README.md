@@ -33,8 +33,8 @@ $start = new Point(52.5200, 13.4050); // Berlin
 $end = new Point(48.8566, 2.3522); // Paris
 $calculator = new HaversineCalculator(EarthRadius::MEAN_RADIUS);
 $route = new Route($start, $end, $calculator);
-
-echo "Distance using Haversine formula with mean radius: " . $route->calculateDistance() . " meters\n";
+$distance = Route::getHumanReadableDistance($haversineCalculator->calculate($route));
+echo "Distance using Haversine formula with mean radius: " . $distance;
 ```
 
 ### Calculate Distance Using Vincenty Formula
@@ -48,8 +48,8 @@ $start = new Point(52.5200, 13.4050); // Berlin
 $end = new Point(48.8566, 2.3522); // Paris
 $calculator = new VincentyCalculator();
 $route = new Route($start, $end, $calculator);
-
-echo "Distance using Vincenty formula: " . $route->calculateDistance() . " meters\n";
+$distance = Route::getHumanReadableDistance($vincentyCalculator->calculate($route));
+echo "Distance using Vincenty formula: " . $distance;
 ```
 
 ## Distance Calculation Formulas
