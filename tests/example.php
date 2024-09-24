@@ -5,9 +5,8 @@ declare(strict_types=1);
 
 namespace PHPDistance\tests;
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use Doctrine\DBAL\Exception;
 use PHPDistance\Enums\EarthRadius;
 use PHPDistance\HaversineCalculator;
 use PHPDistance\SqlCalculator;
@@ -17,7 +16,7 @@ use PHPDistance\VincentyCalculator;
 use Doctrine\DBAL\DriverManager;
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__.'/..');
 $dotenv->load();
 try {
     $connection = DriverManager::getConnection([
