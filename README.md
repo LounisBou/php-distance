@@ -1,6 +1,6 @@
-# PHPDistance
+# php-distance
 
-PHPDistance is a simple PHP library for calculating the distance between two geographical points on Earth. It supports different Earth radius values and various distance calculation formulas.
+php-distance is a simple PHP library for calculating the distance between two geographical points on Earth. It supports different Earth radius values and various distance calculation formulas.
 
 ## Installation
 
